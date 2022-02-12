@@ -19,14 +19,20 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView contactsRecycler;
     ContactsAdapter contactsAdapter;
 
+    public native String contactListFromJNI();
+    public native String contactSortFromJNI(String findName);
+    public native void addContactsFromJNI(String name, String number);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         List<Contacts> contactsList = new ArrayList<>();
-        contactsList.add(new Contacts("Вася","89601145497"));
+        //contactsList.add(new Contacts(JNIList.get(0),"89601145497"));
+        contactsList.add(new Contacts("Петя","89601145497"));
         contactsList.add(new Contacts("Петя","89601145497"));
         contactsList.add(new Contacts("Лёша","89601145497"));
 
@@ -50,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
      * A native method that is implemented by the 'phonebook' native library,
      * which is packaged with this application.
      */
-    public native String contactsFromJNI();
+
 
     public void Click(View view) {
         Intent intent = new Intent(MainActivity.this, SecondActivity.class);
