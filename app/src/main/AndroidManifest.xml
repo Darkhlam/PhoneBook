@@ -19,8 +19,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SecondActivity"
-            android:label="Second">
+            android:name=".AboutDeviceActivity"
+            android:label="AboutDevice">
+        </activity>
+        <activity
+            android:name=".CreateContactActivity"
+            android:label="CreateContact">
         </activity>
     </application>
 

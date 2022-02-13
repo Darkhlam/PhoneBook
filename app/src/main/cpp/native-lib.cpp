@@ -3,10 +3,18 @@
 #include <vector>
 
 class Contact {
-public:
 
     std::string name;
     std::string number;
+
+public:
+
+    std::string getName() const{
+        return this->name;
+    }
+    std::string getNumber() const{
+        return this->number;
+    }
 
     Contact(const std::string &name, const std::string &number) {
         this->name = name;
@@ -39,22 +47,22 @@ Java_com_test_phonebook_MainActivity_contactSortFromJNI(JNIEnv *env, jobject  /*
     std::vector<Contact> sortContacts;
     std::string name = jstring2string(env,findName);
     for (auto &contact:contacts) {
-        if (contact.name.find(name)!= std::string::npos)
+        if (contact.getName().find(name)!= std::string::npos)
             sortContacts.emplace_back(contact);
     }
     return env->NewStringUTF(getJsonContactString(sortContacts).c_str());
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_test_phonebook_MainActivity_addContactsFromJNI(JNIEnv *env, jobject  /* this */,
+Java_com_test_phonebook_CreateContactActivity_addContactsFromJNI(JNIEnv *env, jobject  /* this */,
                                                         jstring name, jstring number) {
     contacts.emplace_back(jstring2string(env, name), jstring2string(env, number));
 }
 
 std::vector<std::string> createNames() {
 
-    std::vector<std::string> names = {"Антон",
-                                      "Борис",
+    std::vector<std::string> names = {"Anton",
+                                      "Boris",
                                       "Виталий",
                                       "Григорий",
                                       "Дмитрий"};
@@ -116,7 +124,10 @@ std::string getJsonContactString(std::vector<Contact> contacts) {
     for (auto &contact:contacts) {
         fContactString += contact.getContactString() + ",\n\n";
     }
-    fContactString.substr(0, fContactString.size() - 3);
+    if(contacts.size()!=0) {
+        fContactString = fContactString.substr(0, fContactString.size() - 3);
+    }
     fContactString += "\n]\n}";
     return fContactString;
 }
+

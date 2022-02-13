@@ -6,7 +6,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,31 +25,55 @@ public class MainActivity extends AppCompatActivity {
     static {
         System.loadLibrary("phonebook");
     }
+
     RecyclerView contactsRecycler;
     ContactsAdapter contactsAdapter;
+    TextView find;
 
     public native String contactListFromJNI();
     public native String contactSortFromJNI(String findName);
-    public native void addContactsFromJNI(String name, String number);
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        find = findViewById(R.id.find);
 
-        List<Contacts> contactsList = new ArrayList<>();
-        //contactsList.add(new Contacts(JNIList.get(0),"89601145497"));
-        contactsList.add(new Contacts("Петя","89601145497"));
-        contactsList.add(new Contacts("Петя","89601145497"));
-        contactsList.add(new Contacts("Лёша","89601145497"));
+        find.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-        setContactsRecycler(contactsList);
+            }
 
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                List<Contacts> contactsLis = new ArrayList<>();
+                try {
+                    String x = find.getText().toString();
+                    JSONArray json = new JSONObject(contactSortFromJNI(x)).getJSONArray("contacts");
+                    for (int j = 0; j < json.length(); j++) {
+                        String name = json.getJSONObject(j).getString("name");
+                        String number = json.getJSONObject(j).getString("number");
+                        contactsLis.add(new Contacts(name, number));
+                    }
+                    setContactsRecycler(contactsLis);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
 
-        /*TextView x = findViewById(R.id.sample_text);
-        x.setText(stringFromJNI());*/
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+    }
+
+    protected void onResume(){
+        super.onResume();
+        find.setText("");
+
     }
 
     private void setContactsRecycler(List<Contacts> contactsList) {
@@ -58,8 +91,14 @@ public class MainActivity extends AppCompatActivity {
      */
 
 
-    public void Click(View view) {
-        Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+    public void clickAbout(View view) {
+        Intent intent = new Intent(MainActivity.this, AboutDeviceActivity.class);
+        startActivity(intent);
+    }
+
+
+    public void clickAddContact(View view) {
+        Intent intent = new Intent(MainActivity.this, CreateContactActivity.class);
         startActivity(intent);
     }
 }

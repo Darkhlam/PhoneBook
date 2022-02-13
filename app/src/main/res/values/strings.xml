@@ -1,9 +1,14 @@
 <resources>
     <string name="app_name">PhoneBook</string>
-    <string name="title">Телефонный справочник</string>
-    <string name="button">Об устройстве</string>
+    <string name="title_main">Телефонный справочник</string>
+    <string name="title_create">Создать контакт</string>
+    <string name="about">Об устройстве</string>
     <string name="no_name">Нет имени</string>
     <string name="no_number">Нет номера</string>
     <string name="no_text">Нет текста</string>
     <string name="back">Назад</string>
+    <string name="add">Добавить</string>
+    <string name="add_name">Введите имя</string>
+    <string name="add_number">Введите номер</string>
+    <string name="find_name">Поиск по имени</string>
 </resources>
